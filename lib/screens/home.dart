@@ -25,13 +25,14 @@ class _HomePageState extends State<HomePage> {
       PlayerPage(),
       SettingsPage(),
     ];
-
+    print(Theme.of(context).textSelectionTheme.cursorColor.toString());
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: idx,
         onTap: (i) => setState(() => idx = i),
         elevation: 0,
         unselectedItemColor: Colors.white,
+        selectedItemColor: Theme.of(context).textSelectionTheme.cursorColor,
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(

@@ -38,6 +38,7 @@ dependencies:
   http:
   google_fonts: 2.2.0
   transparent_image:
+  flutter_widgets:
   cached_network_image:
   mobx:
   flutter_mobx:
@@ -52,9 +53,20 @@ dependencies:
   objectdb:
 
 
+
 dev_dependencies:
+  build_runner:
+  mobx_codegen:
+  flutter_launcher_icons:
+
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

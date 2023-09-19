@@ -16,16 +16,16 @@ abstract class _PlayerStore with Store {
   int idx = 0;
 
   @observable
-  late AudiobookFull book;
+  AudiobookFull? book;
 
   @observable
   bool loading = false;
 
   @observable
-  Color bgColor = Color(0xFF000120);
+  Color bgColor = Color(0xFF0e153a);
 
   @observable
-  Color accentColor = Color(0xFFff6b80);
+  Color accentColor = Color(0xFF22d1ee);
 
   @observable
   int seekTime = 5;
@@ -53,8 +53,8 @@ abstract class _PlayerStore with Store {
   @action
   void loadColors() {
     SharedPreferences.getInstance().then((prefs) {
-      bgColor = HexColor(prefs.getString("bgColor")??"");
-      accentColor = HexColor(prefs.getString("accentColor")??"");
+      bgColor = HexColor(prefs.getString("bgColor")??"#000120");
+      accentColor = HexColor(prefs.getString("accentColor")??"#ff6b80");
     });
   }
 

@@ -96,26 +96,29 @@ class BookItem extends StatelessWidget {
                     navigate();
                   },
                 ),
-                ListTile(
-                  leading: Icon(Feather.book),
-                  title: Text(
-                    "Read",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(ctx).pop();
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (c) => ReaderPage(
-                          name: audioData.title,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                // Code for Read Button
+
+                // ListTile(
+                //   leading: Icon(Feather.book),
+                //   title: Text(
+                //     "Read",
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Navigator.of(ctx).pop();
+                //
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (c) => ReaderPage(
+                //           name: audioData.title,
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
                 ListTile(
                   leading: Icon(Feather.x),
                   title: Text(

@@ -261,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ],
                               ),
                               actions: <Widget>[
-                                FlatButton(
+                                TextButton(
                                   child: Text("OK"),
                                   onPressed: () {
                                     state.seekTime =
@@ -270,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Navigator.of(context).pop();
                                   },
                                 ),
-                                FlatButton(
+                                TextButton(
                                   child: Text("Cancel"),
                                   onPressed: () {
                                     Navigator.of(context).pop();

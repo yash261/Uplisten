@@ -6,154 +6,149 @@ part of 'playerState.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlayerStore on _PlayerStore, Store {
-  final _$idAtom = Atom(name: '_PlayerStore.id');
+  late final _$idAtom = Atom(name: '_PlayerStore.id', context: context);
 
   @override
   int get id {
-    _$idAtom.context.enforceReadPolicy(_$idAtom);
-    _$idAtom.reportObserved();
+    _$idAtom.reportRead();
     return super.id;
   }
 
   @override
   set id(int value) {
-    _$idAtom.context.conditionallyRunInAction(() {
+    _$idAtom.reportWrite(value, super.id, () {
       super.id = value;
-      _$idAtom.reportChanged();
-    }, _$idAtom, name: '${_$idAtom.name}_set');
+    });
   }
 
-  final _$idxAtom = Atom(name: '_PlayerStore.idx');
+  late final _$idxAtom = Atom(name: '_PlayerStore.idx', context: context);
 
   @override
   int get idx {
-    _$idxAtom.context.enforceReadPolicy(_$idxAtom);
-    _$idxAtom.reportObserved();
+    _$idxAtom.reportRead();
     return super.idx;
   }
 
   @override
   set idx(int value) {
-    _$idxAtom.context.conditionallyRunInAction(() {
+    _$idxAtom.reportWrite(value, super.idx, () {
       super.idx = value;
-      _$idxAtom.reportChanged();
-    }, _$idxAtom, name: '${_$idxAtom.name}_set');
+    });
   }
 
-  final _$bookAtom = Atom(name: '_PlayerStore.book');
+  late final _$bookAtom = Atom(name: '_PlayerStore.book', context: context);
 
   @override
-  AudiobookFull get book {
-    _$bookAtom.context.enforceReadPolicy(_$bookAtom);
-    _$bookAtom.reportObserved();
+  AudiobookFull? get book {
+    _$bookAtom.reportRead();
     return super.book;
   }
 
   @override
-  set book(AudiobookFull value) {
-    _$bookAtom.context.conditionallyRunInAction(() {
+  set book(AudiobookFull? value) {
+    _$bookAtom.reportWrite(value, super.book, () {
       super.book = value;
-      _$bookAtom.reportChanged();
-    }, _$bookAtom, name: '${_$bookAtom.name}_set');
+    });
   }
 
-  final _$loadingAtom = Atom(name: '_PlayerStore.loading');
+  late final _$loadingAtom =
+      Atom(name: '_PlayerStore.loading', context: context);
 
   @override
   bool get loading {
-    _$loadingAtom.context.enforceReadPolicy(_$loadingAtom);
-    _$loadingAtom.reportObserved();
+    _$loadingAtom.reportRead();
     return super.loading;
   }
 
   @override
   set loading(bool value) {
-    _$loadingAtom.context.conditionallyRunInAction(() {
+    _$loadingAtom.reportWrite(value, super.loading, () {
       super.loading = value;
-      _$loadingAtom.reportChanged();
-    }, _$loadingAtom, name: '${_$loadingAtom.name}_set');
+    });
   }
 
-  final _$bgColorAtom = Atom(name: '_PlayerStore.bgColor');
+  late final _$bgColorAtom =
+      Atom(name: '_PlayerStore.bgColor', context: context);
 
   @override
   Color get bgColor {
-    _$bgColorAtom.context.enforceReadPolicy(_$bgColorAtom);
-    _$bgColorAtom.reportObserved();
+    _$bgColorAtom.reportRead();
     return super.bgColor;
   }
 
   @override
   set bgColor(Color value) {
-    _$bgColorAtom.context.conditionallyRunInAction(() {
+    _$bgColorAtom.reportWrite(value, super.bgColor, () {
       super.bgColor = value;
-      _$bgColorAtom.reportChanged();
-    }, _$bgColorAtom, name: '${_$bgColorAtom.name}_set');
+    });
   }
 
-  final _$accentColorAtom = Atom(name: '_PlayerStore.accentColor');
+  late final _$accentColorAtom =
+      Atom(name: '_PlayerStore.accentColor', context: context);
 
   @override
   Color get accentColor {
-    _$accentColorAtom.context.enforceReadPolicy(_$accentColorAtom);
-    _$accentColorAtom.reportObserved();
+    _$accentColorAtom.reportRead();
     return super.accentColor;
   }
 
   @override
   set accentColor(Color value) {
-    _$accentColorAtom.context.conditionallyRunInAction(() {
+    _$accentColorAtom.reportWrite(value, super.accentColor, () {
       super.accentColor = value;
-      _$accentColorAtom.reportChanged();
-    }, _$accentColorAtom, name: '${_$accentColorAtom.name}_set');
+    });
   }
 
-  final _$seekTimeAtom = Atom(name: '_PlayerStore.seekTime');
+  late final _$seekTimeAtom =
+      Atom(name: '_PlayerStore.seekTime', context: context);
 
   @override
   int get seekTime {
-    _$seekTimeAtom.context.enforceReadPolicy(_$seekTimeAtom);
-    _$seekTimeAtom.reportObserved();
+    _$seekTimeAtom.reportRead();
     return super.seekTime;
   }
 
   @override
   set seekTime(int value) {
-    _$seekTimeAtom.context.conditionallyRunInAction(() {
+    _$seekTimeAtom.reportWrite(value, super.seekTime, () {
       super.seekTime = value;
-      _$seekTimeAtom.reportChanged();
-    }, _$seekTimeAtom, name: '${_$seekTimeAtom.name}_set');
+    });
   }
 
-  final _$persistColorsAsyncAction = AsyncAction('persistColors');
+  late final _$persistColorsAsyncAction =
+      AsyncAction('_PlayerStore.persistColors', context: context);
 
   @override
   Future<void> persistColors() {
     return _$persistColorsAsyncAction.run(() => super.persistColors());
   }
 
-  final _$playAsyncAction = AsyncAction('play');
+  late final _$playAsyncAction =
+      AsyncAction('_PlayerStore.play', context: context);
 
   @override
   Future<void> play(int i) {
     return _$playAsyncAction.run(() => super.play(i));
   }
 
-  final _$persistSeekTimeAsyncAction = AsyncAction('persistSeekTime');
+  late final _$persistSeekTimeAsyncAction =
+      AsyncAction('_PlayerStore.persistSeekTime', context: context);
 
   @override
   Future<void> persistSeekTime() {
     return _$persistSeekTimeAsyncAction.run(() => super.persistSeekTime());
   }
 
-  final _$_PlayerStoreActionController = ActionController(name: '_PlayerStore');
+  late final _$_PlayerStoreActionController =
+      ActionController(name: '_PlayerStore', context: context);
 
   @override
   void loadColors() {
-    final _$actionInfo = _$_PlayerStoreActionController.startAction();
+    final _$actionInfo = _$_PlayerStoreActionController.startAction(
+        name: '_PlayerStore.loadColors');
     try {
       return super.loadColors();
     } finally {
@@ -163,11 +158,25 @@ mixin _$PlayerStore on _PlayerStore, Store {
 
   @override
   void loadSeekTime() {
-    final _$actionInfo = _$_PlayerStoreActionController.startAction();
+    final _$actionInfo = _$_PlayerStoreActionController.startAction(
+        name: '_PlayerStore.loadSeekTime');
     try {
       return super.loadSeekTime();
     } finally {
       _$_PlayerStoreActionController.endAction(_$actionInfo);
     }
+  }
+
+  @override
+  String toString() {
+    return '''
+id: ${id},
+idx: ${idx},
+book: ${book},
+loading: ${loading},
+bgColor: ${bgColor},
+accentColor: ${accentColor},
+seekTime: ${seekTime}
+    ''';
   }
 }

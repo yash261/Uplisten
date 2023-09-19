@@ -118,7 +118,7 @@ class _ReaderPageState extends State<ReaderPage> {
                                   icon: Icon(Icons.keyboard_arrow_left),
                                 ),
                               ),
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   if (Platform.isAndroid) {
                                     Navigator.of(context).pop();

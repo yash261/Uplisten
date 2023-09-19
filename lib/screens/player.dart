@@ -87,9 +87,8 @@ class _PlayerPageState extends State<PlayerPage> {
               );
             }
           }
-
           return PlayerComponent(
-            book: playerState.book,
+            book: playerState.book!,
             globalContext: context,
           );
         },

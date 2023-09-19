@@ -32,11 +32,11 @@ class _PlayerComponentState extends State<PlayerComponent> {
   bool isPlaying = false;
   bool complete = false;
   int currentSection = 0;
-  late Duration duration;
-  late Duration position;
+  Duration duration=Duration();
+  Duration position=Duration();
   bool firstLoad = true;
   bool requiresSeek = false;
-  late Duration seekTo;
+  Duration seekTo=Duration();
 
   late StreamSubscription durationSubscription;
   late StreamSubscription positionSubscription;
@@ -122,8 +122,7 @@ class _PlayerComponentState extends State<PlayerComponent> {
     final urlReq = await get(
       Uri.parse(buildUrl),
     );
-
-    await audioPlayer.play(UrlSource(urlReq.body.replaceFirst("http", "https")));
+    await audioPlayer.play(UrlSource(urlReq.body));
   }
 
   seekToSaved() {
@@ -389,7 +388,7 @@ class _PlayerComponentState extends State<PlayerComponent> {
                                 ),
                               ),
                             ),
-                      (duration != null && position != null)
+                      (duration.inMilliseconds!=0)
                           ? Container(
                               child: Column(
                                 children: <Widget>[
@@ -400,6 +399,7 @@ class _PlayerComponentState extends State<PlayerComponent> {
                                               (val * duration.inMilliseconds)
                                                   .round()),
                                     ),
+                            
                                     value: position.inMilliseconds /
                                         duration.inMilliseconds,
                                     activeColor: Colors.white,
@@ -446,212 +446,215 @@ class _PlayerComponentState extends State<PlayerComponent> {
                                       left: 24,
                                       right: 24,
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        IconButton(
-                                          icon: Icon(Icons.keyboard_arrow_left),
-                                          onPressed: currentSection == 0
-                                              ? null
-                                              : () {
-                                                  setState(() {
-                                                    currentSection--;
-                                                  });
-
-                                                  play();
-                                                },
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.rotate_left),
-                                          onPressed: () => audioPlayer.seek(
-                                            Duration(
-                                              milliseconds: (position
-                                                          .inMilliseconds <
-                                                      (state.seekTime * 1000)
-                                                  ? 0
-                                                  : position.inMilliseconds -
-                                                      (state.seekTime * 1000)),
-                                            ),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          IconButton(
+                                            icon: Icon(Icons.keyboard_arrow_left),
+                                            onPressed: currentSection == 0
+                                                ? null
+                                                : () {
+                                                    setState(() {
+                                                      currentSection--;
+                                                    });
+                                    
+                                                    play();
+                                                  },
                                           ),
-                                        ),
-                                        AnimatedCrossFade(
-                                          crossFadeState: isPlaying
-                                              ? CrossFadeState.showSecond
-                                              : CrossFadeState.showFirst,
-                                          duration: Duration(milliseconds: 150),
-                                          firstChild: IconButton(
-                                            icon: Icon(Icons.play_arrow),
-                                            onPressed: () =>
-                                                audioPlayer.resume(),
-                                          ),
-                                          secondChild: IconButton(
-                                            icon: Icon(Icons.pause),
-                                            onPressed: () =>
-                                                audioPlayer.pause(),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.rotate_right),
-                                          onPressed: () => audioPlayer.seek(
-                                            Duration(
-                                              milliseconds: (duration
-                                                              .inMilliseconds -
-                                                          position
-                                                              .inMilliseconds <
-                                                      (state.seekTime * 1000)
-                                                  ? duration.inMilliseconds
-                                                  : position.inMilliseconds +
-                                                      (state.seekTime * 1000)),
-                                            ),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon:
-                                              Icon(Icons.keyboard_arrow_right),
-                                          onPressed: currentSection + 1 ==
-                                                  widget.book.audio.length
-                                              ? null
-                                              : () {
-                                                  setState(() {
-                                                    currentSection++;
-                                                  });
-
-                                                  play();
-                                                },
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.bookmark_border),
-                                          onPressed: () async {
-                                            Directory dbPath =
-                                                await getApplicationDocumentsDirectory();
-                                            final db = ObjectDB(dbPath.path +
-                                                "/bookmarks__03.db");
-                                            // await db.open();
-
-                                            var results = await db
-                                                .find({"id": widget.book.id});
-
-                                            showBottomSheet(
-                                              context: context,
-                                              builder: (context) => Container(
-                                                child: Wrap(
-                                                  children: List.generate(
-                                                      results.length + 2,
-                                                      (index) {
-                                                    if (index == 0) {
-                                                      return ListTile(
-                                                        leading: Icon(
-                                                          Icons.add,
-                                                        ),
-                                                        title: Text(
-                                                          "Save current position",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        onTap: () async {
-                                                          await db.insert(
-                                                            {
-                                                              "id": widget
-                                                                  .book.id,
-                                                              "position":
-                                                                  position
-                                                                      .toString()
-                                                                      .substring(
-                                                                        0,
-                                                                        position.toString().length -
-                                                                            7,
-                                                                      ),
-                                                              "section":
-                                                                  currentSection
-                                                                      .toString(),
-                                                            },
-                                                          );
-
-                                                          db.cleanup();
-                                                          await db.close();
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      );
-                                                    } else if (index !=
-                                                        results.length + 1) {
-                                                      var res =
-                                                          results[index - 1];
-
-                                                      return ListTile(
-                                                        title: Text(
-                                                          "${widget.book.audio[int.parse(res["section"])].title} - ${res["position"]}",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        onTap: () async {
-                                                          setState(() {
-                                                            currentSection =
-                                                                int.parse(
-                                                              res["section"],
-                                                            );
-                                                          });
-
-                                                          Navigator.of(context)
-                                                              .pop();
-
-                                                          audioPlayer.pause();
-
-                                                          await play();
-
-                                                          final stringSlice =
-                                                              res["position"]
-                                                                  .split(":");
-
-                                                          setState(() {
-                                                            requiresSeek = true;
-
-                                                            seekTo = Duration(
-                                                              hours: int.parse(
-                                                                stringSlice[0],
-                                                              ),
-                                                              minutes:
-                                                                  int.parse(
-                                                                stringSlice[1],
-                                                              ),
-                                                              seconds:
-                                                                  int.parse(
-                                                                stringSlice[2],
-                                                              ),
-                                                            );
-                                                          });
-
-                                                          db.cleanup();
-                                                          await db.close();
-                                                        },
-                                                      );
-                                                    } else {
-                                                      return ListTile(
-                                                        leading: Icon(
-                                                          Feather.x,
-                                                        ),
-                                                        title: Text(
-                                                          "Cancel",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      );
-                                                    }
-                                                  }),
-                                                ),
+                                          IconButton(
+                                            icon: Icon(Icons.rotate_left),
+                                            onPressed: () => audioPlayer.seek(
+                                              Duration(
+                                                milliseconds: (position
+                                                            .inMilliseconds <
+                                                        (state.seekTime * 1000)
+                                                    ? 0
+                                                    : position.inMilliseconds -
+                                                        (state.seekTime * 1000)),
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ],
+                                            ),
+                                          ),
+                                          AnimatedCrossFade(
+                                            crossFadeState: isPlaying
+                                                ? CrossFadeState.showSecond
+                                                : CrossFadeState.showFirst,
+                                            duration: Duration(milliseconds: 150),
+                                            firstChild: IconButton(
+                                              icon: Icon(Icons.play_arrow),
+                                              onPressed: () =>
+                                                  audioPlayer.resume(),
+                                            ),
+                                            secondChild: IconButton(
+                                              icon: Icon(Icons.pause),
+                                              onPressed: () =>
+                                                  audioPlayer.pause(),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.rotate_right),
+                                            onPressed: () => audioPlayer.seek(
+                                              Duration(
+                                                milliseconds: (duration
+                                                                .inMilliseconds -
+                                                            position
+                                                                .inMilliseconds <
+                                                        (state.seekTime * 1000)
+                                                    ? duration.inMilliseconds
+                                                    : position.inMilliseconds +
+                                                        (state.seekTime * 1000)),
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon:
+                                                Icon(Icons.keyboard_arrow_right),
+                                            onPressed: currentSection + 1 ==
+                                                    widget.book.audio.length
+                                                ? null
+                                                : () {
+                                                    setState(() {
+                                                      currentSection++;
+                                                    });
+                                    
+                                                    play();
+                                                  },
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.bookmark_border),
+                                            onPressed: () async {
+                                              Directory dbPath =
+                                                  await getApplicationDocumentsDirectory();
+                                              final db = ObjectDB(dbPath.path +
+                                                  "/bookmarks__03.db");
+                                              // await db.open();
+                                    
+                                              var results = await db
+                                                  .find({"id": widget.book.id});
+                                    
+                                              showBottomSheet(
+                                                context: context,
+                                                builder: (context) => Container(
+                                                  child: Wrap(
+                                                    children: List.generate(
+                                                        results.length + 2,
+                                                        (index) {
+                                                      if (index == 0) {
+                                                        return ListTile(
+                                                          leading: Icon(
+                                                            Icons.add,
+                                                          ),
+                                                          title: Text(
+                                                            "Save current position",
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            await db.insert(
+                                                              {
+                                                                "id": widget
+                                                                    .book.id,
+                                                                "position":
+                                                                    position
+                                                                        .toString()
+                                                                        .substring(
+                                                                          0,
+                                                                          position.toString().length -
+                                                                              7,
+                                                                        ),
+                                                                "section":
+                                                                    currentSection
+                                                                        .toString(),
+                                                              },
+                                                            );
+                                    
+                                                            db.cleanup();
+                                                            await db.close();
+                                                            Navigator.of(context)
+                                                                .pop();
+                                                          },
+                                                        );
+                                                      } else if (index !=
+                                                          results.length + 1) {
+                                                        var res =
+                                                            results[index - 1];
+                                    
+                                                        return ListTile(
+                                                          title: Text(
+                                                            "${widget.book.audio[int.parse(res["section"])].title} - ${res["position"]}",
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            setState(() {
+                                                              currentSection =
+                                                                  int.parse(
+                                                                res["section"],
+                                                              );
+                                                            });
+                                    
+                                                            Navigator.of(context)
+                                                                .pop();
+                                    
+                                                            audioPlayer.pause();
+                                    
+                                                            await play();
+                                    
+                                                            final stringSlice =
+                                                                res["position"]
+                                                                    .split(":");
+                                    
+                                                            setState(() {
+                                                              requiresSeek = true;
+                                    
+                                                              seekTo = Duration(
+                                                                hours: int.parse(
+                                                                  stringSlice[0],
+                                                                ),
+                                                                minutes:
+                                                                    int.parse(
+                                                                  stringSlice[1],
+                                                                ),
+                                                                seconds:
+                                                                    int.parse(
+                                                                  stringSlice[2],
+                                                                ),
+                                                              );
+                                                            });
+                                    
+                                                            db.cleanup();
+                                                            await db.close();
+                                                          },
+                                                        );
+                                                      } else {
+                                                        return ListTile(
+                                                          leading: Icon(
+                                                            Feather.x,
+                                                          ),
+                                                          title: Text(
+                                                            "Cancel",
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                          onTap: () {
+                                                            Navigator.of(context)
+                                                                .pop();
+                                                          },
+                                                        );
+                                                      }
+                                                    }),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

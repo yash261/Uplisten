@@ -20,7 +20,11 @@ class App extends StatelessWidget {
           brightness: Brightness.dark,
           backgroundColor: state.bgColor,
           canvasColor: state.bgColor,
-          cursorColor: state.accentColor,
+          focusColor: state.accentColor,
+          hoverColor: state.accentColor,
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: state.accentColor, //<-- SEE HERE
+          ),
           textTheme: GoogleFonts.montserratTextTheme(
             Theme.of(context).textTheme,
           ),

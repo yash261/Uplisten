@@ -34,9 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.lightBlueAccent.shade200,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(child: Image.asset('assets/icon.png',height: 120,),),
+          const SizedBox(height: 20,),
           Center(child: Text(
             "Uplisten",
             style: GoogleFonts.playfairDisplay(
